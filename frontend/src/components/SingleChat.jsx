@@ -22,7 +22,7 @@ import Lottie from "react-lottie";
 
 import animation from "../components/animation/animations.json";
 
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = "https://chatme-u7pb.onrender.com";
 let socket;
 let selectedChatCompare;
 

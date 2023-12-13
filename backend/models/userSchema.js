@@ -18,7 +18,7 @@ const userSchema = new Schema(
     },
     pic: {
       type: String,
-      default: "/images/avatar.png",
+      default: "/public/images/avatar.png",
     },
   },
   { timestamps: true }

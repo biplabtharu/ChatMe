@@ -15,15 +15,35 @@ import { Server } from "socket.io";
 connectDb();
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve("./public")));
 app.use(express.urlencoded({ extended: false }));
 
-app.use(cors());
 app.use("/api/user", router);
 app.use("/api/chat", chatrouter);
 app.use("/api/message", messageRoute);
 
+// -----------------------DEPLOYMENT--------------------------
+// const __dirname1 = path.resolve("dist");
+// console.log(__dirname1);
+// console.log(path.join(__dirname1, "../frontend/dist"));
+// console.log(path.resolve(__dirname1, "../frontend", "dist", "index.html"));
+// if (process.env.NODE_ENV === "production") {
+app.use(express.static(path.resolve("dist")));
+//   app.use(express.static(path.join(__dirname1, "../frotend/dist")));
+// console.log(`I love you`);
+
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname1, "../frontend", "dist", "index.html"));
+//   });
+// } else {
+// app.get("/", (req, res) => {
+// res.send("Api is running successfully");
+// });
+// }
+
+// -----------------------DEPLOYMENT---------------------------
 app.use(notFound);
 app.use(otherErrorHandler);
 
@@ -34,8 +54,8 @@ const server = app.listen(PORT, () => {
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PUT"],
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
   },
 });
 

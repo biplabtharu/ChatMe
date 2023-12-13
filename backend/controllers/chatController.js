@@ -112,7 +112,7 @@ const renameGroup = async (req, res) => {
         const updateGroup = await CHAT.findByIdAndUpdate(
           { _id: chatId },
           {
-            chatName,
+            chatName: chatName,
           },
           { new: true }
         );

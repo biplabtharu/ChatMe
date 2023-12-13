@@ -39,7 +39,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
     // setFetchAgain(!fetchAgain);
     // console.log(fetchAgain);
 
-    console.log(query);
+    // console.log(query);
     if (!query) {
       return;
     }
@@ -51,10 +51,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         },
       };
 
-      const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/user?search=${query}`,
-        config
-      );
+      const { data } = await axios.get(`/api/user?search=${query}`, config);
 
       //   console.log(token);
       //   console.log(data);
@@ -65,7 +62,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       toast({
         title: "Write something to search.",
         status: "warning",
-        duration: 9000,
+        duration: 3000000,
         isClosable: true,
         position: "bottom",
       });
@@ -87,21 +84,21 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        `http://127.0.0.1:8000/api/chat/renamegroup`,
+        `/api/chat/renamegroup`,
         { chatName: groupChatName, chatId: selectedChat._id },
         config
       );
 
       // console.log(data);
-      console.log(selectedChat);
-      setGroupChatName("");
+      // console.log(selectedChat);
       setSelectedChat(data);
-      console.log(fetchAgain);
+      // setGroupChatName("");
+      // console.log(fetchAgain);
       // setFetchAgain(!fetchAgain);
-      console.log(fetchAgain);
+      // console.log(fetchAgain);
       setFetchAgain(!fetchAgain);
-      console.log(fetchAgain);
-      console.log(selectedChat);
+      // console.log(fetchAgain);
+      // console.log(selectedChat);
 
       setRenameLoading(false);
     } catch (err) {
@@ -109,7 +106,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         title: "Failed to update group name.",
         description: err.message,
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
@@ -119,27 +116,30 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
   };
 
   const handleAddUser = async (userToAdd) => {
+    if (selectedChat.users.find((elem) => elem._id === userToAdd._id)) {
+      toast({
+        title: "User already added",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
     if (selectedChat.groupAdmin._id !== user._id) {
       toast({
         title: "Only admins can add users",
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
       return;
     }
-    if (selectedChat.users.find((elem) => elem._id === userToAdd._id)) {
-      toast({
-        title: "User already added",
-        status: "warning",
-        duration: 9000,
-        isClosable: true,
-        position: "top",
-      });
-      return;
-    }
+
     try {
+      setLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -147,7 +147,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        `http://127.0.0.1:8000/api/chat/addtogroup`,
+        `/api/chat/addtogroup`,
         {
           chatId: selectedChat._id,
           userId: userToAdd._id,
@@ -156,34 +156,37 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       );
 
       setSelectedChat(data);
-      console.log(fetchAgain);
+      // console.log(fetchAgain);
       setFetchAgain(!fetchAgain);
       // setFetchAgain(!fetchAgain);
-
-      console.log(fetchAgain);
+      //
+      // console.log(fetchAgain);
 
       setLoading(false);
     } catch (err) {
       toast({
         title: "Error adding user",
         description: err.message,
-        status: "danger",
-        duration: 5000,
+        status: "error",
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
+      setLoading(false);
     }
+    setGroupChatName("");
   };
 
   const handleRemove = async (usertobedeleted) => {
+    // console.log(selectedChat);
     if (
       selectedChat.groupAdmin._id !== user._id &&
       usertobedeleted._id !== user._id
     ) {
       toast({
         title: "Only admin can remove someone",
-        status: "danger",
-        duration: 5000,
+        status: "error",
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -198,7 +201,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        `http://127.0.0.1:8000/api/chat/removefromgroup`,
+        `/api/chat/removefromgroup`,
         {
           chatId: selectedChat._id,
           userId: usertobedeleted._id,
@@ -210,9 +213,9 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         ? setSelectedChat()
         : setSelectedChat(data);
 
-      // console.log(fetchAgain);
-      fetchMessages();
       setFetchAgain(!fetchAgain);
+      fetchMessages();
+      // console.log(fetchAgain);
       // console.log(fetchAgain);
 
       setLoading(false);
@@ -225,7 +228,9 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         isClosable: true,
         position: "top",
       });
+      setLoading(false);
     }
+    setGroupChatName("");
   };
   return (
     <>
@@ -242,15 +247,14 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
           <ModalCloseButton />
           <ModalBody>
             <Box display={"flex"} flexWrap={"wrap"}>
-              {selectedChat.users.map((user) => {
-                return (
-                  <SelectedUserForGroup
-                    key={user._id}
-                    user={user}
-                    handleFunction={() => handleRemove(user)}
-                  />
-                );
-              })}
+              {selectedChat.users.map((user) => (
+                <SelectedUserForGroup
+                  key={user._id}
+                  user={user}
+                  admin={selectedChat.groupAdmin}
+                  handleFunction={() => handleRemove(user)}
+                />
+              ))}
             </Box>
 
             <FormControl display={"flex"} gap={"10px"} mb={"10px"}>
@@ -280,21 +284,21 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
               {loading ? (
                 <Spinner size={"lg"} />
               ) : (
-                searchResult.slice(0, 4).map((elem) => {
-                  return (
-                    <UserListItem
-                      key={elem._id}
-                      user={elem}
-                      handleFunction={() => handleAddUser(elem)}
-                    />
-                  );
-                })
+                searchResult?.map((elem) => (
+                  <UserListItem
+                    key={elem._id}
+                    user={elem}
+                    handleFunction={() => handleAddUser(elem)}
+                  />
+                ))
               )}
             </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red">Leave group</Button>
+            <Button colorScheme="red" onClick={() => handleRemove(user)}>
+              Leave group
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

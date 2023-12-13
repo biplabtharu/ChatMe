@@ -24,10 +24,7 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
         },
       };
 
-      const { data } = await axios.get(
-        "http://127.0.0.1:8000/api/chat",
-        config
-      );
+      const { data } = await axios.get("/api/chat", config);
 
       setChats(data);
     } catch (err) {
@@ -36,7 +33,7 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
         title: "Error occured",
         description: "failed to load the chat",
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });

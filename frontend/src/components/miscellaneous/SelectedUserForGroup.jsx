@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 
-const SelectedUserForGroup = ({ user, handleFunction }) => {
+const SelectedUserForGroup = ({ user, handleFunction, admin }) => {
   return (
     <>
       <Box
@@ -18,6 +18,7 @@ const SelectedUserForGroup = ({ user, handleFunction }) => {
         onClick={handleFunction}
       >
         {user.name}
+        {admin === user._id && <span>(Admin)</span>}
         <CloseIcon
           boxSize={3}
           d="flex"

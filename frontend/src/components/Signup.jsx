@@ -110,7 +110,7 @@ const Signup = () => {
         };
 
         const { data } = await axios.post(
-          "http://127.0.0.1:8000/api/user/signup",
+          "/api/user/signup",
           { name, email, password, pic },
           config
         );
@@ -172,7 +172,7 @@ const Signup = () => {
               size="sm"
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button h="1.75rem" size="sm" mb={2} onClick={handleClick}>
                 {show ? "Hide" : "Show"}
               </Button>
             </InputRightElement>
@@ -189,7 +189,13 @@ const Signup = () => {
               size="sm"
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button
+                h="1.75rem"
+                mb={2}
+                size="sm"
+                onClick={handleClick}
+                borderRadius={"1px"}
+              >
                 {show ? "Hide" : "Show"}
               </Button>
             </InputRightElement>
@@ -201,9 +207,8 @@ const Signup = () => {
           <Input
             type="file"
             accept="/image/*"
-            p={"1.5"}
             onChange={(e) => postDetails(e.target.files[0])}
-            size="sm"
+            size={"sm"}
           />
         </FormControl>
 

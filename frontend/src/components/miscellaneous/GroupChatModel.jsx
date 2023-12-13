@@ -33,7 +33,7 @@ const GroupChatModel = ({ children }) => {
   const toast = useToast();
 
   const handleSearch = async (query) => {
-    console.log(query);
+    // console.log(query);
     setLoading(true);
     if (!query) {
       return;
@@ -45,10 +45,7 @@ const GroupChatModel = ({ children }) => {
         },
       };
 
-      const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/user?search=${query}`,
-        config
-      );
+      const { data } = await axios.get(`/api/user?search=${query}`, config);
 
       //   console.log(token);
       //   console.log(data);
@@ -59,7 +56,7 @@ const GroupChatModel = ({ children }) => {
       toast({
         title: "Write something to search.",
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
@@ -71,7 +68,7 @@ const GroupChatModel = ({ children }) => {
       toast({
         title: "User already added",
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -108,7 +105,7 @@ const GroupChatModel = ({ children }) => {
       },
     };
     const { data } = await axios.post(
-      `http://127.0.0.1:8000/api/chat/creategroup`,
+      `/api/chat/creategroup`,
       {
         name: groupChatName,
         users: JSON.stringify(selectedUsers.map((elem) => elem._id)),
@@ -168,28 +165,26 @@ const GroupChatModel = ({ children }) => {
               justifyContent="flex-start"
               alignItems="center"
             >
-              {selectedUsers.map((user) => {
-                return (
-                  <SelectedUserForGroup
-                    key={user._id}
-                    user={user}
-                    handleFunction={() => handleDelete(user._id)}
-                  />
-                );
-              })}
+              {selectedUsers.map((user) => (
+                <SelectedUserForGroup
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => handleDelete(user._id)}
+                />
+              ))}
             </Box>
             {loading ? (
               <ChatLoadingSmall />
             ) : (
-              searchResult.slice(0, 4).map((elem) => {
-                return (
+              searchResult
+                ?.slice(0, 4)
+                .map((elem) => (
                   <UserListItem
                     key={elem._id}
                     user={elem}
                     handleFunction={() => handleAddUser(elem)}
                   />
-                );
-              })
+                ))
             )}
           </ModalBody>
 

@@ -30,6 +30,8 @@ import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../userProfile/UserListItem";
 import { getSender } from "../chatHelper/chatIde";
+import NotificationBadge from "react-notification-badge";
+import { Effect } from "react-notification-badge";
 
 const SideDrawer = () => {
   const toast = useToast();
@@ -78,10 +80,7 @@ const SideDrawer = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/user?search=${search}`,
-        config
-      );
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
 
       setLoading(false);
       // console.log(data);
@@ -111,11 +110,7 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/chat",
-        { userId },
-        config
-      );
+      const { data } = await axios.post("/api/chat", { userId }, config);
 
       // console.log(`access chat data ${data}`);
       // console.log(data);
@@ -156,8 +151,12 @@ const SideDrawer = () => {
 
         <div>
           <Menu>
-            <MenuButton>
-              <BellIcon fontSize="2xl" m={1} />
+            <MenuButton mr={3}>
+              <NotificationBadge
+                count={notifications.length}
+                effect={Effect.SCALE}
+              />
+              <BellIcon fontSize="2xl" />
             </MenuButton>
 
             <MenuList pl={3}>

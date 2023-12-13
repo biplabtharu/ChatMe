@@ -51,7 +51,7 @@ const Signin = () => {
     };
     try {
       const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/user/signin",
+        "/api/user/signin",
         { email, password },
         config
       );
@@ -119,7 +119,7 @@ const Signin = () => {
               name="password"
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button h="1.75rem" mb={2} size="sm" onClick={handleClick}>
                 {show ? "Hide" : "Show"}
               </Button>
             </InputRightElement>
@@ -134,18 +134,6 @@ const Signin = () => {
         >
           Sign in
         </Button>
-
-        {/* <Button
-          variant={"solid"}
-          colorScheme="red"
-          width="100%"
-          onClick={() => {
-            setEmail("guest@mesezeme.com");
-            setPassword("123456");
-          }}
-        >
-          Login as Guest user
-        </Button> */}
       </VStack>
     </>
   );

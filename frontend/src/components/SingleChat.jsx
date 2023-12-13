@@ -18,8 +18,11 @@ import axios from "axios";
 import "./styles.css";
 import ScrollableMessage from "./ScrollableMessage";
 import io from "socket.io-client";
+import Lottie from "react-lottie";
 
-const ENDPOINT = "http://127.0.0.1:8000";
+import animation from "../components/animation/animations.json";
+
+const ENDPOINT = "http://localhost:8000";
 let socket;
 let selectedChatCompare;
 
@@ -91,7 +94,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       };
       setLoading(true);
       const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/message/${selectedChat._id}`,
+        `/api/message/${selectedChat._id}`,
         config
       );
 
@@ -105,7 +108,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         title: "fetching message error occured",
         description: err.message,
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
@@ -126,7 +129,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         };
 
         const { data } = await axios.post(
-          "http://127.0.0.1:8000/api/message",
+          "/api/message",
           {
             content: newMessage,
             chat: selectedChat._id,
@@ -146,7 +149,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           title: "sending message error occured",
           description: err.message,
           status: "warning",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "bottom",
         });
@@ -178,6 +181,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setTyping(false);
       }
     }, typingIndicatorLength);
+  };
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
 
   return (
@@ -246,13 +258,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
 
             <FormControl onKeyDown={sendMessage}>
-              {isTyping ? <div>Loading</div> : <></>}
+              {isTyping ? (
+                <Lottie
+                  options={defaultOptions}
+                  height={50}
+                  width={50}
+                  style={{ marginBottom: "0", marginLeft: "0" }}
+                />
+              ) : (
+                <></>
+              )}
               <Input
                 type="text"
                 placeholder="type a message"
                 variant={"filled"}
                 width={"100%"}
-                mt={6}
+                mt={2}
                 bg={"#ffffff"}
                 onChange={typeHandler}
                 value={newMessage}

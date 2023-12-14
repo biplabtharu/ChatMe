@@ -9,10 +9,10 @@ import ChatLoading from "./ChatLoading";
 import { getSender } from "../chatHelper/chatIde";
 
 const MyChats = ({ fetchAgain, setFetchAgain }) => {
-  const { selectedChat, setSelectedChat, chats, setChats, user } = ChatState();
+  const { selectedChat, setSelectedChat, chats, setChats, user, setUser } =
+    ChatState();
   const { token } = user;
 
-  const [loggedUser, setLoggedUser] = useState();
   const toast = useToast();
 
   const fetchChats = async () => {
@@ -41,7 +41,7 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
-    setLoggedUser(JSON.parse(localStorage.getItem("signin-user-data")));
+    setUser(JSON.parse(localStorage.getItem("signin-user-data")));
     fetchChats();
   }, [fetchAgain]);
 
@@ -104,7 +104,7 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
                   >
                     <Text>
                       {!chat.isGroupChat
-                        ? getSender(loggedUser, chat.users)
+                        ? getSender(user, chat.users)
                         : chat.chatName}
                     </Text>
                   </Box>

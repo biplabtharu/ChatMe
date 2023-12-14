@@ -23,7 +23,7 @@ const HomePage = () => {
     const user = JSON.parse(localStorage.getItem("signin-user-data"));
 
     if (user) {
-      console.log(user);
+      // console.log(user);
       navigateTo("/chats");
     }
   }, [navigateTo]);

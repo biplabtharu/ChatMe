@@ -22,7 +22,8 @@ import Lottie from "react-lottie";
 
 import animation from "../components/animation/animations.json";
 
-const ENDPOINT = "https://chatme-u7pb.onrender.com";
+// const ENDPOINT = "https://chatme-u7pb.onrender.com"
+const ENDPOINT = "http://127.0.0.1:8000";
 let socket;
 let selectedChatCompare;
 
@@ -73,6 +74,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       ) {
         if (!notifications.includes(newMessageReceived)) {
           setNotifications([newMessageReceived, ...notifications]);
+          // console.log(notifications);
+          localStorage.setItem("notifications", JSON.stringify(notifications));
+          // console.log(`notf is `);
+          // console.log(notf);
           setFetchAgain(!fetchAgain);
         }
 
@@ -271,7 +276,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               <Input
                 type="text"
                 placeholder="type a message"
-                variant={"filled"}
+                // variant={"filled"}
                 width={"100%"}
                 mt={2}
                 bg={"#ffffff"}

@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 
 import axios from "axios";
+import { ChatState } from "../context/ChatProvider";
 
 const Signup = () => {
   const navigateTo = useNavigate();
@@ -23,6 +24,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState();
   const [pic, setPic] = useState();
   const [loading, setLoading] = useState(false);
+  const { user, setUser } = ChatState();
 
   const toast = useToast();
 
@@ -37,10 +39,11 @@ const Signup = () => {
         title: "Upload image",
         description: "Please, upload an image",
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
+      setLoading(false);
     }
 
     if (
@@ -68,7 +71,7 @@ const Signup = () => {
         title: "Upload image",
         description: "Please, upload an image",
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
@@ -84,23 +87,20 @@ const Signup = () => {
         title: "Sign up error.",
         description: "all the fields are required",
         status: "success",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
       setLoading(false);
-      return;
-    }
-    if (password !== confirmPassword) {
+    } else if (password !== confirmPassword) {
       toast({
         title: "Password not matching.",
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
       setLoading(false);
-      return;
     } else {
       try {
         const config = {
@@ -119,19 +119,21 @@ const Signup = () => {
         toast({
           title: "Sign up successfull.",
           status: "success",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "bottom",
         });
 
+        setUser(data);
         localStorage.setItem("signin-user-data", JSON.stringify(data));
+        setLoading(false);
         navigateTo("/chats");
       } catch (err) {
         toast({
           title: "Error occurred",
           description: err.message,
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "bottom",
         });

@@ -13,16 +13,17 @@ import {
 } from "@chakra-ui/react";
 
 import axios from "axios";
+import { ChatState } from "../context/ChatProvider";
 
 const Signin = () => {
   const toast = useToast();
   const navigateTo = useNavigate();
   const [show, setshow] = useState(false);
-  const [name, setName] = useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [pic, setPic] = useState();
   const [loading, setLoading] = useState(false);
+
+  const { user, setUser } = ChatState();
 
   const handleClick = () => {
     setshow(!show);
@@ -65,7 +66,12 @@ const Signin = () => {
           isClosable: true,
           position: "bottom",
         });
+
+        setUser(data);
+        console.log(`user is`);
+        console.log(user);
         localStorage.setItem("signin-user-data", JSON.stringify(data));
+        setLoading(false);
         navigateTo("/chats");
       } else {
         toast({
@@ -76,7 +82,6 @@ const Signin = () => {
           position: "bottom",
         });
         setLoading(false);
-        return;
       }
     } catch (err) {
       console.log(err);
@@ -90,6 +95,11 @@ const Signin = () => {
       });
       setLoading(false);
     }
+  };
+
+  const handeleGuestUser = () => {
+    setEmail("guest@gmail.com");
+    setPassword("guest");
   };
 
   return (

@@ -61,6 +61,13 @@ const userSignin = async (req, res) => {
       const passwordMatch = await userExists.matchPassword(password);
 
       if (passwordMatch) {
+        res.cookie("userdata", {
+          _id: userExists._id,
+          name: userExists.name,
+          email: userExists.email,
+          pic: userExists.pic,
+          token: await userExists.generateToken(userExists),
+        });
         res.status(200).json({
           _id: userExists._id,
           name: userExists.name,

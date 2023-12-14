@@ -14,6 +14,7 @@ import chatrouter from "./backend/routes/chatRoute.js";
 import messageRoute from "./backend/routes/messageRoute.js";
 const PORT = process.env.PORT || 8000;
 import { Server } from "socket.io";
+import cookieParser from "cookie-parser";
 
 connectDb();
 const app = express();
@@ -22,6 +23,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve("./public")));
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cookieParser());
 
 app.use("/api/user", router);
 app.use("/api/chat", chatrouter);
